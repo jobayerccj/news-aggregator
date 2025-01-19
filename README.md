@@ -6,11 +6,35 @@ News aggregator service that pulls articles from various sources and provides en
 1. docker, docker compose
 
 ## Installation
-1. Start project 
-`./vendor/bin/sail up`
+1. Install necessary dependencies
 
-2. run necessary migrations 
-`./vendor/bin/sail artisan migrate`
+    ```bash
+    composer install
+    ```
+
+2. Add .env file and update database connection information
+    *   `cp .env-example .env`
+    *   Update database credentials in the `.env` file. For example:
+        ```
+        DB_DATABASE=your_database_name
+        DB_USERNAME=your_database_user
+        DB_PASSWORD=your_database_password
+        ```
+    *   Generate application key
+        ```
+        php artisan key:generate
+        ```
+
+3. Start project 
+    ```bash
+    ./vendor/bin/sail up
+    ```
+
+4. run necessary migrations 
+
+    ```bash
+    ./vendor/bin/sail artisan migrate
+    ```
 
 ## License
 
