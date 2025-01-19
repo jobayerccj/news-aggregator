@@ -36,6 +36,22 @@ News aggregator service that pulls articles from various sources and provides en
     ./vendor/bin/sail artisan migrate
     ```
 
+5. Analyze code using php-cs-fixer (instead of changing anything automatically, it will show recommendation & we need to confirm it manually)
+
+    ```
+    ./vendor/bin/php-cs-fixer fix --dry-run --diff
+    ```
+
+    If php-cs-fixer is showing error for PHP version, plz execute it
+    ```
+    export PHP_CS_FIXER_IGNORE_ENV=1
+    ```
+
+6. Analyze code using php-stan
+    ```
+    ./vendor/bin/phpstan analyse
+    ```
+
 ## License
 
 The project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
