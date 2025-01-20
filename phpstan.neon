@@ -13,3 +13,4 @@ parameters:
         - '#Undefined variable: \$this#'
 includes:
     - vendor/larastan/larastan/extension.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon

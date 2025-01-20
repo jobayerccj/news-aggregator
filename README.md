@@ -52,6 +52,40 @@ News aggregator service that pulls articles from various sources and provides en
     ./vendor/bin/phpstan analyse
     ```
 
+7. Testing
+    *   `cp .env .env.testing`
+
+    *   Create database for testing
+        ```
+        touch database/testing.sqlite
+        ```
+
+    *   Update database credentials in the `.env.testing` file. Example:
+        ```
+        DB_CONNECTION=sqlite
+        DB_DATABASE=database/testing.sqlite
+        ```
+
+    *   Run unit test cases
+        ```
+        ./vendor/bin/sail php artisan test --testsuite Unit
+        ```
+
+    *   Run fearure test cases
+        ```
+        ./vendor/bin/sail php artisan test --testsuite Feature
+        ```
+
+    *   Check test coverage for feature test
+        ```
+        ./vendor/bin/sail php artisan test --testsuite=Feature --coverage-html=storage/test-coverage
+        ```
+
+    *   Check test coverage for unit test
+        ```
+        ./vendor/bin/sail php artisan test --testsuite=Unit --coverage-html=storage/test-coverage
+        ```
+
 ## License
 
 The project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
