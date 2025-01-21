@@ -30,13 +30,18 @@ News aggregator service that pulls articles from various sources and provides en
     ./vendor/bin/sail up
     ```
 
-4. run necessary migrations 
+4. Run necessary migrations 
 
     ```bash
     ./vendor/bin/sail artisan migrate
     ```
 
-5. Analyze code using php-cs-fixer (instead of changing anything automatically, it will show recommendation & we need to confirm it manually)
+5. Access container's shell
+    ```
+    ./vendor/bin/sail shell
+    ```
+
+6. Analyze code using php-cs-fixer (instead of changing anything automatically, it will show recommendation & we need to confirm it manually)
 
     ```
     ./vendor/bin/php-cs-fixer fix --dry-run --diff
@@ -47,12 +52,18 @@ News aggregator service that pulls articles from various sources and provides en
     export PHP_CS_FIXER_IGNORE_ENV=1
     ```
 
-6. Analyze code using php-stan
+7. Run news aggregator command
+    ```
+    php artisan news:collect {apiName}
+    ```
+    Available api names are newsapi, nytimes, guardian
+
+8. Analyze code using php-stan
     ```
     ./vendor/bin/phpstan analyse
     ```
 
-7. Testing
+9. Testing
     *   `cp .env .env.testing`
 
     *   Create database for testing
