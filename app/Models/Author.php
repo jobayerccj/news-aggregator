@@ -16,4 +16,9 @@ class Author extends Model
     {
         return $this->hasMany(Article::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_preferences');
+    }
 }

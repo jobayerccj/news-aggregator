@@ -7,6 +7,9 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Source;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class ArticleManagerService
 {
@@ -69,5 +72,28 @@ class ArticleManagerService
                 'category_id' => $categoryId,
             ]
         );
+    }
+
+    public function getArticlesByUserPreferences(User $user, int $perPage = 10): JsonResponse
+    {
+        $cacheKey = "user:{$user->id}:preferred_articles";
+
+        $articles = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($user, $perPage) {
+            $preferenceIds = [
+                'authors' => $user->preferredAuthors()->pluck('authors.id')->toArray(),
+                'sources' => $user->preferredSources()->pluck('sources.id')->toArray(),
+                'categories' => $user->preferredCategories()->pluck('categories.id')->toArray(),
+            ];
+    
+            return Article::query()
+                ->when(!empty($preferenceIds['authors']), fn($query) => $query->whereIn('author_id', $preferenceIds['authors']))
+                ->when(!empty($preferenceIds['sources']), fn($query) => $query->whereIn('source_id', $preferenceIds['sources']))
+                ->when(!empty($preferenceIds['categories']), fn($query) => $query->whereHas('category', fn($q) => $q->whereIn('categories.id', $preferenceIds['categories'])))
+                ->select(['id', 'title', 'content', 'author_id', 'source_id', 'category_id', 'news_url'])
+                ->with(['author:id,name', 'source:id,name', 'category:id,name'])
+                ->paginate($perPage);
+        });
+
+        return response()->json($articles);
     }
 }

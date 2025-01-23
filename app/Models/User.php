@@ -48,4 +48,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function preferredAuthors()
+    {
+        return $this->belongsToMany(Author::class, 'user_preferences');
+    }
+
+    public function preferredSources()
+    {
+        return $this->belongsToMany(Source::class, 'user_preferences');
+    }
+
+    public function preferredCategories()
+    {
+        return $this->belongsToMany(Category::class, 'user_preferences');
+    }
 }
