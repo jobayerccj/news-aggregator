@@ -3,50 +3,24 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Article;
+use App\Services\ArticleManagerService;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(private ArticleManagerService $articleManagerService)
     {
-        $articles = Article::with('author')->get();
+    }
+    public function index(Request $request)
+    {
+        $filters = $request->only(['keyword', 'date', 'category', 'source']);
+        $perPage = $request->get('per_page', 10);
 
-        return response()->json($articles);
+        return $this->articleManagerService->searchArticles($filters, $perPage);
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  */
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'content' => 'required',
-    //         'author_id' => 'required|exists:authors,id',
-    //         'source_id' => 'required|exists:sources,id',
-    //         'categories' => 'array|exists:categories,id', // Array of category IDs
-    //     ]);
-
-    //     $article = Article::create($validated);
-
-    //     if (isset($validated['categories'])) {
-    //         $article->categories()->sync($validated['categories']);
-    //     }
-
-    //     return response()->json($article->load('author', 'source', 'categories'), 201);
-    // }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Article $article)
+    public function show(int $articleId)
     {
-        $article->load('author');
-
-        return response()->json($article);
+        return $this->articleManagerService->getArticleDetails($articleId);
     }
 }

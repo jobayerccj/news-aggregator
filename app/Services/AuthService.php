@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +12,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-    public function registerUser(array $validatedUserData)
+    use ApiResponse;
+
+    public function registerUser(array $validatedUserData): JsonResponse
     {
         $user = User::create([
             'name' => $validatedUserData['name'],
@@ -20,48 +24,39 @@ class AuthService
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return [
+        $result = [
             'user' => $user,
             'token' => $token,
-            'message' => 'User registered successfully',
-            'status' => Response::HTTP_CREATED,
         ];
+
+        return $this->successResponse($result, 'User registered successfully', Response::HTTP_CREATED);
     }
 
-    public function loginUser(array $credentials): array
+    public function loginUser(array $credentials): JsonResponse
     {
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            return [
+            $result = [
                 'user' => $user,
                 'token' => $token,
                 'message' => 'Logged in successfully',
                 'status' => Response::HTTP_OK,
             ];
+
+            return $this->successResponse($result);
         }
 
-        return [
-            'message' => 'Invalid credentials',
-            'status' => Response::HTTP_UNAUTHORIZED,
-        ];
+        return $this->errorResponse('Invalid credentials', Response::HTTP_UNAUTHORIZED);
     }
 
-    public function logoutUser(Request $request): array
+    public function logoutUser(Request $request): JsonResponse
     {
         if ($request->user()) {
             $request->user()->currentAccessToken()->delete();
         }
 
-        // $request->user()->tokens->each(function ($token) {
-        //     $token->delete(); // Delete the user's token(s)
-        // });
-
-        //dd('logout', $request->user());
-        return [
-            'message' => 'Logged out successfully',
-            'status' => Response::HTTP_OK,
-        ];
+        return $this->successResponse('Logged out successfully', Response::HTTP_OK);
     }
 }

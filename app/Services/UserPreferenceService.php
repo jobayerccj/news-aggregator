@@ -2,11 +2,15 @@
 
 namespace App\Services;
 
+use App\Traits\ApiResponse;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class UserPreferenceService
 {
-    public function updatePreferences(User $user, array $preferences): void
+    use ApiResponse;
+    
+    public function updatePreferences(User $user, array $preferences): JsonResponse
     {
         if (isset($preferences['authors'])) {
             $user->preferredAuthors()->sync($preferences['authors']);
@@ -19,14 +23,18 @@ class UserPreferenceService
         if (isset($preferences['categories'])) {
             $user->preferredCategories()->sync($preferences['categories']);
         }
+
+        return $this->successResponse('Preferences updated successfully.');
     }
 
-    public function getPreferences(User $user): array
+    public function getPreferences(User $user)
     {
-        return [
+        $preferences = [
             'authors' => $user->preferredAuthors()->pluck('authors.name')->toArray(),
             'sources' => $user->preferredSources()->pluck('sources.name')->toArray(),
             'categories' => $user->preferredCategories()->pluck('categories.name')->toArray(),
         ];
+        
+        return $this->successResponse($preferences);
     }
 }

@@ -34,6 +34,8 @@ News aggregator service that pulls articles from various sources and provides en
 
     ```bash
     ./vendor/bin/sail artisan migrate
+
+    ./vendor/bin/sail artisan scout:import App\\Models\\Article
     ```
 
 5. Access container's shell
