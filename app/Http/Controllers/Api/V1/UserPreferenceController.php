@@ -18,8 +18,6 @@ class UserPreferenceController extends Controller
     {
         
         return $this->preferenceService->updatePreferences(auth()->user(), $request->validated());
-
-        //return response()->json(['message' => 'Preferences updated successfully.']);
     }
 
     public function index()

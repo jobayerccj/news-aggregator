@@ -24,7 +24,7 @@ class UserPreferenceService
             $user->preferredCategories()->sync($preferences['categories']);
         }
 
-        return $this->successResponse('Preferences updated successfully.');
+        return $this->successResponse(null, 'Preferences updated successfully.');
     }
 
     public function getPreferences(User $user)

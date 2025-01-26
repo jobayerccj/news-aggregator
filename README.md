@@ -1,9 +1,12 @@
 ## News Aggregator
 
-News aggregator service that pulls articles from various sources and provides endpoints for a frontend application to consume.:
+News aggregator service that pulls articles from various sources and provides endpoints for a frontend application to consume.
+
+## Available API endpoints
+https://www.postman.com/cloudy-crescent-872614/news-aggregator-v1/request/q08jje4/request-password-reset-link
 
 ## Requirements
-1. docker, docker compose
+1. docker, docker compose, PHP >= 8.2
 
 ## Installation
 1. Install necessary dependencies

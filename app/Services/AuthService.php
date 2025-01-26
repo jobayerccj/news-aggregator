@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\URL;
 
 class AuthService
 {
@@ -57,6 +59,28 @@ class AuthService
             $request->user()->currentAccessToken()->delete();
         }
 
-        return $this->successResponse('Logged out successfully', Response::HTTP_OK);
+        return $this->successResponse(null, 'Logged out successfully', Response::HTTP_OK);
+    }
+
+    public function sendResetLinkEmail(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $credentials = $request->only('email');
+        $response = Password::sendResetLink($request->only('email'));
+
+        if ($response === Password::RESET_LINK_SENT) {
+            $user = \App\Models\User::where('email', $credentials['email'])->first();
+
+            if ($user) {
+                $token = Password::getRepository()->create($user);
+
+                $link = URL::to('/api/v1/password/reset') . '?token=' . $token . '&email=' . urlencode($user->email);
+                
+                return $this->successResponse(['link' => $link, 'message' => 'Reset link sent to your email.'], Response::HTTP_OK);
+            }
+        }
     }
 }

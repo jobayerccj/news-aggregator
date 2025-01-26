@@ -27,8 +27,7 @@ class ArticleManagerService
     public function getArticlesByUserPreferences(User $user, int $perPage = 10): JsonResponse
     {
         $cacheKey = "user:{$user->id}:preferred_articles";
-
-        $articles = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($user, $perPage) {
+        $articles = Cache::remember($cacheKey, now()->addMinutes(1), function () use ($user, $perPage) {
             $preferenceIds = [
                 'authors' => $user->preferredAuthors()->pluck('authors.id')->toArray(),
                 'sources' => $user->preferredSources()->pluck('sources.id')->toArray(),
@@ -36,9 +35,9 @@ class ArticleManagerService
             ];
 
             return Article::query()
-                ->when(! empty($preferenceIds['authors']), fn ($query) => $query->whereIn('author_id', $preferenceIds['authors']))
-                ->when(! empty($preferenceIds['sources']), fn ($query) => $query->whereIn('source_id', $preferenceIds['sources']))
-                ->when(! empty($preferenceIds['categories']), fn ($query) => $query->whereHas('category', fn ($q) => $q->whereIn('categories.id', $preferenceIds['categories'])))
+                ->when(!empty($preferenceIds['authors']), fn ($query) => $query->whereIn('author_id', $preferenceIds['authors']))
+                ->when(!empty($preferenceIds['sources']), fn ($query) => $query->whereIn('source_id', $preferenceIds['sources']))
+                ->when(!empty($preferenceIds['categories']), fn ($query) => $query->whereHas('category', fn ($q) => $q->whereIn('categories.id', $preferenceIds['categories'])))
                 ->select(['id', 'title', 'content', 'author_id', 'source_id', 'category_id', 'news_url'])
                 ->with(['author:id,name', 'source:id,name', 'category:id,name'])
                 ->paginate($perPage);

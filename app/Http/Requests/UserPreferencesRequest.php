@@ -3,9 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpFoundation\Response;
+use App\Traits\ApiResponse;
 
 class UserPreferencesRequest extends FormRequest
 {
+    use ApiResponse;
+    
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -43,5 +49,10 @@ class UserPreferencesRequest extends FormRequest
             'categories.array' => 'Categories must be an array.',
             'categories.exists' => 'One or more categories are invalid.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException($this->errorResponse($validator->errors()->first(), Response::HTTP_UNPROCESSABLE_ENTITY, $validator->errors()));
     }
 }
