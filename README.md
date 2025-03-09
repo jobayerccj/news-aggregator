@@ -3,7 +3,7 @@
 News aggregator service that pulls articles from various sources and provides endpoints for a frontend application to consume.
 
 ## Available API endpoints
-https://www.postman.com/cloudy-crescent-872614/news-aggregator-v1/request/q08jje4/request-password-reset-link
+https://www.postman.com/cloudy-crescent-872614/news-aggregator-v1/documentation/vfv51qu/news-aggregator-api
 
 ## Requirements
 1. docker, docker compose, PHP >= 8.2
@@ -27,6 +27,7 @@ https://www.postman.com/cloudy-crescent-872614/news-aggregator-v1/request/q08jje
         ```
         php artisan key:generate
         ```
+    *   Set API keys in ENV file for NEWSAPI_KEY, NYTIMES_KEY, GUARDIAN_KEY
 
 3. Start project 
     ```bash
@@ -41,12 +42,20 @@ https://www.postman.com/cloudy-crescent-872614/news-aggregator-v1/request/q08jje
     ./vendor/bin/sail artisan scout:import App\\Models\\Article
     ```
 
-5. Access container's shell
-    ```
-    ./vendor/bin/sail shell
-    ```
+## Access container's shell
+```
+./vendor/bin/sail shell
+```
 
-6. Analyze code using php-cs-fixer (instead of changing anything automatically, it will show recommendation & we need to confirm it manually)
+## Execute Command
+Run news aggregator command
+```
+php artisan news:collect {apiName}
+```
+Available api names are newsapi, nytimes, guardian
+
+## Analyze code using static code analyzer
+1. Analyze code using php-cs-fixer (instead of changing anything automatically, it will show recommendation & we need to confirm it manually)
 
     ```
     ./vendor/bin/php-cs-fixer fix --dry-run --diff
@@ -56,19 +65,12 @@ https://www.postman.com/cloudy-crescent-872614/news-aggregator-v1/request/q08jje
     ```
     export PHP_CS_FIXER_IGNORE_ENV=1
     ```
-
-7. Run news aggregator command
-    ```
-    php artisan news:collect {apiName}
-    ```
-    Available api names are newsapi, nytimes, guardian
-
-8. Analyze code using php-stan
+2. Analyze code using php-stan
     ```
     ./vendor/bin/phpstan analyse
     ```
 
-9. Testing
+## Testing
     *   `cp .env .env.testing`
 
     *   Create database for testing

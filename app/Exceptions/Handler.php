@@ -44,6 +44,8 @@ class Handler extends ExceptionHandler
     {   
         $this->renderable(function (Throwable $e, Request $request) {
             if ($request->wantsJson()) {
+                Log::error($e);
+
                 if ($e instanceof ValidationException) {
                     return $this->errorResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY, $e->errors());
                 }

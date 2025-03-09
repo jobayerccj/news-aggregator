@@ -30,7 +30,7 @@ class AuthControllerTest extends TestCase
         $response = $this->postJson(self::REGISTER_ENDPOINT, $userData);
 
         $response->assertStatus(Response::HTTP_CREATED)
-            ->assertJsonStructure(['user', 'token', 'message']);
+            ->assertJsonStructure(['success', 'message', 'result']);
 
         $this->assertDatabaseHas('users', [
             'email' => 'test@example.com',
@@ -78,7 +78,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK)
-            ->assertJsonStructure(['user', 'token', 'message']);
+        ->assertJsonStructure(['success', 'message', 'result']);
 
         $this->assertAuthenticatedAs($user);
     }
@@ -137,7 +137,7 @@ class AuthControllerTest extends TestCase
         $response = $this->postJson(self::LOGOUT_ENDPOINT);
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED)
-            ->assertJson(['message' => 'Unauthenticated.']);
+            ->assertJson(['message' => 'Unauthenticated']);
     }
 
     protected function tearDown(): void

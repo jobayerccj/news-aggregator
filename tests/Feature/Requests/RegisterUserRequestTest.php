@@ -117,6 +117,6 @@ class RegisterUserRequestTest extends TestCase
         ]);
 
         $response->assertStatus(201);
-        $response->assertJsonStructure(['user', 'token', 'message']);
+        $response->assertJsonStructure(['success', 'message', 'result']);
     }
 }

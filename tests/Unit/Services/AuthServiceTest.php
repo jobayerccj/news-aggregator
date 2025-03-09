@@ -4,6 +4,7 @@ namespace Tests\Unit\Services;
 
 use App\Services\AuthService;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Mockery;
@@ -17,8 +18,10 @@ class AuthServiceTest extends TestCase
         $mockUser = $this->createMockUser($validatedUserData);
         $authService = app(AuthService::class);
         $result = $authService->registerUser($validatedUserData);
-        $this->assertHasUserTokenAndStatus($result);
-        $this->assertEquals(Response::HTTP_CREATED, $result['status']);
+        $resultArray = $result->getData(true);
+        $this->assertHasUserTokenAndStatus($resultArray);
+
+        $this->assertEquals(Response::HTTP_CREATED, $result->getStatusCode());
     }
 
     public function testLoginUserSuccess()
@@ -32,9 +35,9 @@ class AuthServiceTest extends TestCase
         $userMock = $this->mockAuthenticatedUser();
         $authService = app(AuthService::class);
         $result = $authService->loginUser($credentials);
-
-        $this->assertHasUserTokenAndStatus($result);
-        $this->assertEquals(Response::HTTP_OK, $result['status']);
+        $resultArray = $result->getData(true);
+        $this->assertHasUserTokenAndStatus($resultArray);
+        $this->assertEquals(Response::HTTP_OK, $result->getStatusCode());
     }
 
     public function testLoginUserFailure()
@@ -48,9 +51,11 @@ class AuthServiceTest extends TestCase
 
         $authService = app(AuthService::class);
         $result = $authService->loginUser($invalidCredentials);
-        $this->assertArrayHasKey('message', $result);
-        $this->assertArrayHasKey('status', $result);
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $result['status']);
+        $resultArray = $result->getData(true);
+        
+        $this->assertArrayHasKey('success', $resultArray);
+        $this->assertArrayHasKey('message', $resultArray);
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $result->getStatusCode());
     }
 
     protected function getValidUserData(): array
@@ -127,10 +132,10 @@ class AuthServiceTest extends TestCase
         Mockery::close();
     }
 
-    private function assertHasUserTokenAndStatus(array $result)
+    private function assertHasUserTokenAndStatus(array $resultArray)
     {
-        $this->assertArrayHasKey('user', $result);
-        $this->assertArrayHasKey('token', $result);
-        $this->assertArrayHasKey('status', $result);
+        $this->assertArrayHasKey('success', $resultArray);
+        $this->assertArrayHasKey('message', $resultArray);
+        $this->assertArrayHasKey('result', $resultArray);
     }
 }
