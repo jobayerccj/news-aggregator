@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services;
 
+use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +13,7 @@ use Tests\TestCase;
 
 class AuthServiceTest extends TestCase
 {
-    public function test_registerUser_creates_user_and_returns_token()
+    public function testRegisterUserCreateUserAndReturnsToken()
     {
         $validatedUserData = $this->getValidUserData();
         $mockUser = $this->createMockUser($validatedUserData);

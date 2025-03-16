@@ -12,7 +12,7 @@ class RegisterUserRequestTest extends TestCase
 
     private const REGISTER_ENDPOINT = '/api/v1/register';
 
-    public function test_registration_requires_name()
+    public function testRegistrationRequiresName()
     {
         $response = $this->postJson(self::REGISTER_ENDPOINT, [
             'email' => 'test@example.com',
@@ -23,7 +23,7 @@ class RegisterUserRequestTest extends TestCase
             ->assertJsonValidationErrors(['name']);
     }
 
-    public function test_name_must_be_a_string()
+    public function testNameMustBeAString()
     {
         $response = $this->postJson(self::REGISTER_ENDPOINT, [
             'name' => 123,
@@ -35,7 +35,7 @@ class RegisterUserRequestTest extends TestCase
             ->assertJsonValidationErrors(['name']);
     }
 
-    public function test_name_must_not_be_longer_than_255_characters()
+    public function testNameMustNotBeLongerThan255Characters()
     {
         $longName = str_repeat('a', 256);
         $response = $this->postJson(self::REGISTER_ENDPOINT, [
@@ -48,7 +48,7 @@ class RegisterUserRequestTest extends TestCase
             ->assertJsonValidationErrors(['name']);
     }
 
-    public function test_registration_requires_email()
+    public function testRegistrationRequiresEmail()
     {
         $response = $this->postJson(self::REGISTER_ENDPOINT, [
             'name' => 'Test User',
@@ -59,7 +59,7 @@ class RegisterUserRequestTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    public function test_email_must_be_a_valid_email()
+    public function testEmailMustBeAValidEmail()
     {
         $response = $this->postJson(self::REGISTER_ENDPOINT, [
             'name' => 'Test User',
@@ -71,7 +71,7 @@ class RegisterUserRequestTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    public function test_email_must_be_unique()
+    public function testEmailMustBeUnique()
     {
         User::factory()->create(['email' => 'existing@example.com']);
 
@@ -85,7 +85,7 @@ class RegisterUserRequestTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    public function test_registration_requires_password()
+    public function testRegistrationRequiresPassword()
     {
         $response = $this->postJson(self::REGISTER_ENDPOINT, [
             'name' => 'Test User',
@@ -96,7 +96,7 @@ class RegisterUserRequestTest extends TestCase
             ->assertJsonValidationErrors(['password']);
     }
 
-    public function test_password_must_be_at_least_8_characters()
+    public function testPasswordMustBeAtLeast8Characters()
     {
         $response = $this->postJson(self::REGISTER_ENDPOINT, [
             'name' => 'Test User',
@@ -108,7 +108,7 @@ class RegisterUserRequestTest extends TestCase
             ->assertJsonValidationErrors(['password']);
     }
 
-    public function test_successful_registration()
+    public function testSuccessfulRegistration()
     {
         $response = $this->postJson(self::REGISTER_ENDPOINT, [
             'name' => 'Test User',
