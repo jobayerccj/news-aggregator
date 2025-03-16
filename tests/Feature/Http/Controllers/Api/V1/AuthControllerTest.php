@@ -18,7 +18,7 @@ class AuthControllerTest extends TestCase
     private const LOGIN_ENDPOINT = '/api/v1/login';
     private const LOGOUT_ENDPOINT = '/api/v1/logout';
 
-    public function test_user_can_register_successfully()
+    public function testUserCanRegisterSuccessfully()
     {
         $userData = [
             'name' => 'Test User',
@@ -37,7 +37,7 @@ class AuthControllerTest extends TestCase
         ]);
     }
 
-    public function test_user_registration_validation_fails()
+    public function testUserRegistrationValidationFails()
     {
         $userData = [
             'name' => '',
@@ -52,7 +52,7 @@ class AuthControllerTest extends TestCase
             ->assertJsonValidationErrors(['name', 'email', 'password']);
     }
 
-    public function test_user_registration_email_already_exists()
+    public function testUserRegistrationEmailAlreadyExists()
     {
         $existingUser = User::factory()->create(['email' => 'test@example.com']);
         $userData = [
@@ -68,7 +68,7 @@ class AuthControllerTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    public function test_user_can_login_successfully()
+    public function testUserCanLoginSuccessfully()
     {
         $user = User::factory()->create(['password' => Hash::make('password')]);
 
@@ -78,12 +78,12 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK)
-        ->assertJsonStructure(['success', 'message', 'result']);
+            ->assertJsonStructure(['success', 'message', 'result']);
 
         $this->assertAuthenticatedAs($user);
     }
 
-    public function test_user_login_with_invalid_credentials()
+    public function testUserLoginWithInvalidCredentials()
     {
         $user = User::factory()->create();
 
@@ -98,7 +98,7 @@ class AuthControllerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_user_login_validation_fails()
+    public function testUserLoginValidationFails()
     {
         $response = $this->postJson(self::LOGIN_ENDPOINT, [
             'email' => 'invalid-email',
@@ -109,7 +109,7 @@ class AuthControllerTest extends TestCase
             ->assertJsonValidationErrors(['email', 'password']);
     }
 
-    public function test_user_login_validation_fails_missing_password()
+    public function testUserLoginValidationFailsMissingPassword()
     {
         $response = $this->postJson(self::LOGIN_ENDPOINT, [
             'email' => 'invalid-email',
@@ -121,7 +121,7 @@ class AuthControllerTest extends TestCase
         $this->assertArrayHasKey('errors', $response);
     }
 
-    public function test_user_can_logout_successfully()
+    public function testUserCanLogoutSuccessfully()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -132,7 +132,7 @@ class AuthControllerTest extends TestCase
             ->assertJson(['message' => 'Logged out successfully']);
     }
 
-    public function test_user_cannot_logout_when_not_authenticated()
+    public function testUserCannotLogoutWhenNotAuthenticated()
     {
         $response = $this->postJson(self::LOGOUT_ENDPOINT);
 

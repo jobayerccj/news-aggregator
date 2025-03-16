@@ -70,39 +70,42 @@ Available api names are newsapi, nytimes, guardian
     ./vendor/bin/phpstan analyse
     ```
 
-## Testing
-    *   `cp .env .env.testing`
+## Testing 
+* Copy env file which will be used for testing
+```
+cp .env .env.testing
+```
 
-    *   Create database for testing
-        ```
-        touch database/testing.sqlite
-        ```
+*   Create database for testing
 
-    *   Update database credentials in the `.env.testing` file. Example:
-        ```
-        DB_CONNECTION=sqlite
-        DB_DATABASE=database/testing.sqlite
-        ```
+```
+touch database/testing.sqlite
+```
+*   Update database credentials in the `.env.testing` file. Example:
+```
+DB_CONNECTION=sqlite
+DB_DATABASE=database/testing.sqlite
+```
 
-    *   Run unit test cases
-        ```
-        ./vendor/bin/sail php artisan test --testsuite Unit
-        ```
+*   Run unit test cases
+```
+./vendor/bin/sail php artisan test --testsuite Unit
+```
 
-    *   Run fearure test cases
-        ```
-        ./vendor/bin/sail php artisan test --testsuite Feature
-        ```
+*   Run fearure test cases
+```
+./vendor/bin/sail php artisan test --testsuite Feature
+```
 
-    *   Check test coverage for feature test
-        ```
-        ./vendor/bin/sail php artisan test --testsuite=Feature --coverage-html=storage/test-coverage
-        ```
+*   Check test coverage for feature test
+```
+./vendor/bin/sail php artisan test --testsuite=Feature --coverage-html=storage/test-coverage
+```
 
-    *   Check test coverage for unit test
-        ```
-        ./vendor/bin/sail php artisan test --testsuite=Unit --coverage-html=storage/test-coverage
-        ```
+*   Check test coverage for unit test
+```
+./vendor/bin/sail php artisan test --testsuite=Unit --coverage-html=storage/test-coverage
+```
 
 ## License
 

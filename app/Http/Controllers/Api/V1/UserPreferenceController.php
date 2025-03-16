@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserPreferencesRequest;
 use App\Services\ArticleManagerService;
 use App\Services\UserPreferenceService;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserPreferencesRequest;
 
 class UserPreferenceController extends Controller
 {
@@ -16,7 +16,7 @@ class UserPreferenceController extends Controller
 
     public function update(UserPreferencesRequest $request)
     {
-        
+
         return $this->preferenceService->updatePreferences(auth()->user(), $request->validated());
     }
 

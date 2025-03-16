@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Traits\ApiResponse;
 use App\Models\User;
+use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
 class UserPreferenceService
 {
     use ApiResponse;
-    
+
     public function updatePreferences(User $user, array $preferences): JsonResponse
     {
         if (isset($preferences['authors'])) {
@@ -34,7 +34,7 @@ class UserPreferenceService
             'sources' => $user->preferredSources()->pluck('sources.name')->toArray(),
             'categories' => $user->preferredCategories()->pluck('categories.name')->toArray(),
         ];
-        
+
         return $this->successResponse($preferences);
     }
 }

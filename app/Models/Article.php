@@ -31,12 +31,12 @@ class Article extends Model
         return $this->belongsTo(Author::class);
     }
 
-    public function source()
+    public function source(): BelongsTo
     {
         return $this->belongsTo(Source::class);
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }

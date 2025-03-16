@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->renderable(function (Throwable $e, Request $request) {
             $handler = new AppExceptionHandler(app());
+
             return $handler->render($request, $e);
         });
     })->create();

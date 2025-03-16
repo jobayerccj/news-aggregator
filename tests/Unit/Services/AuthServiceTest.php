@@ -4,7 +4,6 @@ namespace Tests\Unit\Services;
 
 use App\Services\AuthService;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Mockery;
@@ -12,7 +11,7 @@ use Tests\TestCase;
 
 class AuthServiceTest extends TestCase
 {
-    public function test_registerUser_creates_user_and_returns_token()
+    public function testRegisterUserCreateUserAndReturnsToken()
     {
         $validatedUserData = $this->getValidUserData();
         $mockUser = $this->createMockUser($validatedUserData);
@@ -52,7 +51,7 @@ class AuthServiceTest extends TestCase
         $authService = app(AuthService::class);
         $result = $authService->loginUser($invalidCredentials);
         $resultArray = $result->getData(true);
-        
+
         $this->assertArrayHasKey('success', $resultArray);
         $this->assertArrayHasKey('message', $resultArray);
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $result->getStatusCode());

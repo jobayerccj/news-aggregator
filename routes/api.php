@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\UserPreferenceController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Mail;
 
 Route::prefix('v1')->namespace('App\Http\Controllers\Api\V1')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
@@ -12,7 +11,7 @@ Route::prefix('v1')->namespace('App\Http\Controllers\Api\V1')->group(function ()
     Route::post('/password/email', [AuthController::class, 'sendResetLinkEmail']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.reset');
 
-    Route::middleware('auth:sanctum', 'throttle:60,1')->group(function () {
+    Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
 
         Route::apiResource('articles', ArticleController::class)->only(['index', 'show']);

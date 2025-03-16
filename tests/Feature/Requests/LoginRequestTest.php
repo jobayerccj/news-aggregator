@@ -12,7 +12,7 @@ class LoginRequestTest extends TestCase
 
     private const LOGIN_ENDPOINT = '/api/v1/login';
 
-    public function test_login_requires_email()
+    public function testLoginRequiresEmail()
     {
         $response = $this->postJson(self::LOGIN_ENDPOINT, [
             'password' => 'password',
@@ -22,7 +22,7 @@ class LoginRequestTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    public function test_login_requires_valid_email()
+    public function testLoginRequiresValidEmail()
     {
         $response = $this->postJson(self::LOGIN_ENDPOINT, [
             'email' => 'invalid-email',
@@ -33,7 +33,7 @@ class LoginRequestTest extends TestCase
             ->assertJsonValidationErrors(['email']);
     }
 
-    public function test_login_requires_password()
+    public function testLoginRequiresPassword()
     {
         $response = $this->postJson(self::LOGIN_ENDPOINT, [
             'email' => 'test@example.com',
@@ -43,7 +43,7 @@ class LoginRequestTest extends TestCase
             ->assertJsonValidationErrors(['password']);
     }
 
-    public function test_login_successful()
+    public function testLoginSuccessful()
     {
         $user = User::factory()->create();
 

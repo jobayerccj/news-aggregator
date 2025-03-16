@@ -35,9 +35,9 @@ class ArticleManagerService
             ];
 
             return Article::query()
-                ->when(!empty($preferenceIds['authors']), fn ($query) => $query->whereIn('author_id', $preferenceIds['authors']))
-                ->when(!empty($preferenceIds['sources']), fn ($query) => $query->whereIn('source_id', $preferenceIds['sources']))
-                ->when(!empty($preferenceIds['categories']), fn ($query) => $query->whereHas('category', fn ($q) => $q->whereIn('categories.id', $preferenceIds['categories'])))
+                ->when(! empty($preferenceIds['authors']), fn ($query) => $query->whereIn('author_id', $preferenceIds['authors']))
+                ->when(! empty($preferenceIds['sources']), fn ($query) => $query->whereIn('source_id', $preferenceIds['sources']))
+                ->when(! empty($preferenceIds['categories']), fn ($query) => $query->whereHas('category', fn ($q) => $q->whereIn('categories.id', $preferenceIds['categories'])))
                 ->select(['id', 'title', 'content', 'author_id', 'source_id', 'category_id', 'news_url'])
                 ->with(['author:id,name', 'source:id,name', 'category:id,name'])
                 ->paginate($perPage);

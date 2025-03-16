@@ -62,7 +62,7 @@ class AuthService
         return $this->successResponse(null, 'Logged out successfully', Response::HTTP_OK);
     }
 
-    public function sendResetLinkEmail(Request $request): JsonResponse
+    public function sendResetLinkEmail(Request $request)
     {
         $request->validate([
             'email' => 'required|email|exists:users,email',
@@ -72,14 +72,14 @@ class AuthService
         $response = Password::sendResetLink($request->only('email'));
 
         if ($response === Password::RESET_LINK_SENT) {
-            $user = \App\Models\User::where('email', $credentials['email'])->first();
+            $user = User::where('email', $credentials['email'])->first();
 
             if ($user) {
                 $token = Password::getRepository()->create($user);
 
                 $link = URL::to('/api/v1/password/reset') . '?token=' . $token . '&email=' . urlencode($user->email);
-                
-                return $this->successResponse(['link' => $link, 'message' => 'Reset link sent to your email.'], Response::HTTP_OK);
+
+                return $this->successResponse(['link' => $link], 'Reset link sent to your email.', Response::HTTP_OK);
             }
         }
     }
