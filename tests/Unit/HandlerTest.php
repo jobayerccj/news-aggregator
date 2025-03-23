@@ -121,7 +121,6 @@ class HandlerTest extends TestCase
     {
         $request = Mockery::mock(Request::class);
         $exception = new MethodNotAllowedHttpException([]);
-
         $response = $this->handler->render($request, $exception);
 
         $this->assertEquals(Response::HTTP_METHOD_NOT_ALLOWED, $response->getStatusCode());
