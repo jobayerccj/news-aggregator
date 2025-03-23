@@ -109,7 +109,6 @@ class HandlerTest extends TestCase
     {
         $request = Mockery::mock(Request::class);
         $request->shouldReceive('wantsJson')->andReturn(true);
-
         $exception = new ThrottleRequestsException('Too many requests');
 
         $response = $this->invokeRenderable($this->handler, ThrottleRequestsException::class, $exception, $request);
